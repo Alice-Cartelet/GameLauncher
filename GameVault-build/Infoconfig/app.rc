@@ -1,0 +1,36 @@
+#include <windows.h>
+#pragma code_page(65001) // 使用 UTF-8 编码
+
+// 定义图标 (101 是图标的 ID)
+101 ICON "app.ico"
+
+// 定义程序的版本和详细信息
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,0,0
+ PRODUCTVERSION 1,0,0,0
+ FILEFLAGSMASK 0x3fL
+ FILEFLAGS 0x0L
+ FILEOS 0x40004L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        // 080404b0 代表 中文(简体) + Unicode
+        BLOCK "080404b0" 
+        BEGIN
+            VALUE "CompanyName", "AliceCartelet"
+            VALUE "FileDescription", "GameInfo Tools"
+            VALUE "FileVersion", "1.0.0.0"
+            VALUE "InternalName", "ConfigEditor.exe"
+            VALUE "LegalCopyright", "Copyright (C) 2026 AliceCartelet"
+            VALUE "OriginalFilename", "ConfigEditor.exe"
+            VALUE "ProductName", "GameManager tools"
+            VALUE "ProductVersion", "1.0.0.0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x804, 1200
+    END
+END

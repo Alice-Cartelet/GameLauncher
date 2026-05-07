@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>icons/default_game.png</file>
+        <file>icons/default_bg.jpg</file>
+    </qresource>
+</RCC>
