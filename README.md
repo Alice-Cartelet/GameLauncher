@@ -7,7 +7,8 @@
 一款基于 **Qt C++** 开发的现代化、轻量级本地游戏管理与启动工具。告别杂乱的桌面快捷方式，为你电脑里的本地游戏提供一个优雅、沉浸式的统一展示与启动平台。
 
 <img width="1024" height="632" alt="11c13873-b174-4ce1-8b5d-4eb6949c47b2" src="https://github.com/user-attachments/assets/63881c4e-fd1d-4621-b26b-ae1d815b5625" />
----
+
+ ---
 ## ✨ 核心特性 (Features)
 
 * 🚀 **全自动扫描与识别**
