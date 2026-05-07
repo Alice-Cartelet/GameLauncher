@@ -4,7 +4,7 @@
 ![Qt](https://img.shields.io/badge/Qt-%23217346.svg?style=for-the-badge&logo=Qt&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)
 
-一款基于 **Qt C++** 开发的现代化、轻量级本地游戏管理与启动工具。告别杂乱的桌面快捷方式，为你电脑里的本地游戏、独立游戏、视觉小说（Galgame）等提供一个优雅、沉浸式的统一展示与启动平台。
+一款基于 **Qt C++** 开发的现代化、轻量级本地游戏管理与启动工具。告别杂乱的桌面快捷方式，为你电脑里的本地游戏提供一个优雅、沉浸式的统一展示与启动平台。
 
 <img width="1024" height="632" alt="11c13873-b174-4ce1-8b5d-4eb6949c47b2" src="https://github.com/user-attachments/assets/63881c4e-fd1d-4621-b26b-ae1d815b5625" />
 ---
@@ -30,7 +30,7 @@
 
 | 游戏库主界面 | 游戏详情与启动面板 |
 | :---: | :---: |
-| <img width="2277" height="1405" alt="" src="https://github.com/user-attachments/assets/23b41ca1-43d8-4792-b7c0-39e86ce36bed" />|<img width="1024" height="632" alt="11c13873-b174-4ce1-8b5d-4eb6949c47b2" src="https://github.com/user-attachments/assets/63881c4e-fd1d-4621-b26b-ae1d815b5625" />|
+| <img width="1024" height="632" alt="" src="https://github.com/user-attachments/assets/23b41ca1-43d8-4792-b7c0-39e86ce36bed" />|<img width="1024" height="632" alt="11c13873-b174-4ce1-8b5d-4eb6949c47b2" src="https://github.com/user-attachments/assets/63881c4e-fd1d-4621-b26b-ae1d815b5625" />|
 | *自动扫描并以网格排版展示所有游戏* | *右侧滑出的详情面板，展示统计数据并提供自定义选项* |
 
 ---
@@ -61,5 +61,5 @@
 * 启动游戏：在详情面板点击 开始游戏 按钮，首次启动会扫描文件夹中的可执行文件，选择后即可启动，也可在右侧详细信息面板下方修改路径出修改，以后直接点击启动游戏即可直接启动游戏！
  ---
 ## 📄 许可证 (License)
-使用Qt开发，遵循LGPL v3许可。
-并遵循本项目采用 MIT License 协议。
+* 使用Qt开发，遵循LGPL v3许可。
+* 并遵循本项目采用 MIT License 协议。
