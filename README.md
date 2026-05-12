@@ -46,7 +46,7 @@
 
 ## 🚀 快速开始 (Getting Started)
 ### 直接下载
-* 直接下载release中的exe文件，解压并打开GameLauncher Setup.exe并完成安装。或
+* 直接下载release中的exe文件，打开对应的.exe并完成安装。或
 ### 手动编译
 #### 环境依赖
 * Qt 5.15+ 或 Qt 6.x
