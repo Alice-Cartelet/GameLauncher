@@ -1,5 +1,7 @@
 #include "mainwindow.h"
 #include "setupdialog.h"
+#include "orderdialog.h"
+#include "pathmanagerdialog.h"
 #include "executabledialog.h"
 #include <QVBoxLayout>
 #include <QHBoxLayout>
@@ -21,7 +23,126 @@
 #include <QGraphicsOpacityEffect>
 #include <QFileInfo>
 #include <QTimer>
+#include <QParallelAnimationGroup>
+#include <QScreen>
+#include <QGuiApplication>
+#include <QPropertyAnimation>
+#include <QParallelAnimationGroup>
+#include <QGraphicsOpacityEffect>
+#include <QScreen>
+#include <QGuiApplication>
+/*void MainWindow::changeEvent(QEvent* event) {
+    if (event->type() == QEvent::WindowStateChange && !m_animating) {
+        auto* e = static_cast<QWindowStateChangeEvent*>(event);
 
+        if (isMinimized() && !(e->oldState() & Qt::WindowMinimized)) {
+            m_restoreGeo = geometry();
+            setWindowOpacity(0.0);  // 立即透明，不等 timer
+            QTimer::singleShot(0, this, &MainWindow::playMinimizeAnimation);
+        }
+        else if (!isMinimized() && (e->oldState() & Qt::WindowMinimized)) {
+            QTimer::singleShot(0, this, &MainWindow::playRestoreAnimation);
+        }
+    }
+    QMainWindow::changeEvent(event);
+}
+
+void MainWindow::playMinimizeAnimation() {
+    QRect startGeo  = m_restoreGeo;
+    QScreen* screen = QGuiApplication::primaryScreen();
+    QRect screenGeo = screen->availableGeometry();
+    QRect endGeo(screenGeo.center().x(), screenGeo.bottom(), 1, 1);
+
+    QPixmap snapshot = grab();
+    // setWindowOpacity(0.0) 已在 changeEvent 里提前调用，这里不需要了
+
+    auto* ghost = new QWidget(nullptr);
+    ghost->setWindowFlags(Qt::Tool | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
+    ghost->setAttribute(Qt::WA_TranslucentBackground);
+    ghost->setAttribute(Qt::WA_DeleteOnClose);
+    ghost->setGeometry(startGeo);
+
+    auto* label = new QLabel(ghost);
+    label->setPixmap(snapshot);
+    label->setScaledContents(true);
+    label->setGeometry(0, 0, startGeo.width(), startGeo.height());
+
+    ghost->show();
+
+    auto* opacity = new QGraphicsOpacityEffect(ghost);
+    ghost->setGraphicsEffect(opacity);
+
+    auto* geoAnim = new QPropertyAnimation(ghost, "geometry");
+    geoAnim->setDuration(220);
+    geoAnim->setStartValue(startGeo);
+    geoAnim->setEndValue(endGeo);
+    geoAnim->setEasingCurve(QEasingCurve::InQuad);
+
+    auto* fadeAnim = new QPropertyAnimation(opacity, "opacity");
+    fadeAnim->setDuration(220);
+    fadeAnim->setStartValue(1.0);
+    fadeAnim->setEndValue(0.0);
+
+    auto* group = new QParallelAnimationGroup(ghost);
+    group->addAnimation(geoAnim);
+    group->addAnimation(fadeAnim);
+
+    connect(group, &QParallelAnimationGroup::finished, ghost, &QWidget::close);
+    group->start(QAbstractAnimation::DeleteWhenStopped);
+}
+void MainWindow::playRestoreAnimation() {
+    QRect endGeo    = m_restoreGeo;
+    QScreen* screen = QGuiApplication::primaryScreen();
+    QRect screenGeo = screen->availableGeometry();
+    QRect startGeo(screenGeo.center().x(), screenGeo.bottom(), 1, 1);
+
+    // 先移到目标位置并透明，下一帧再 grab
+    setWindowOpacity(0.0);
+    setGeometry(endGeo);
+
+    QTimer::singleShot(0, this, [this, startGeo, endGeo]() {
+        QPixmap snapshot = grab();
+
+        auto* ghost = new QWidget(nullptr);
+        ghost->setWindowFlags(Qt::Tool | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
+        ghost->setAttribute(Qt::WA_TranslucentBackground);
+        ghost->setAttribute(Qt::WA_DeleteOnClose);
+        ghost->setGeometry(startGeo);
+
+        auto* label = new QLabel(ghost);
+        label->setPixmap(snapshot);
+        label->setScaledContents(true);
+        label->setGeometry(0, 0, endGeo.width(), endGeo.height());
+
+        ghost->show();
+
+        auto* opacity = new QGraphicsOpacityEffect(ghost);
+        ghost->setGraphicsEffect(opacity);
+
+        auto* geoAnim = new QPropertyAnimation(ghost, "geometry");
+        geoAnim->setDuration(220);
+        geoAnim->setStartValue(startGeo);
+        geoAnim->setEndValue(endGeo);
+        geoAnim->setEasingCurve(QEasingCurve::OutQuad);
+
+        auto* fadeAnim = new QPropertyAnimation(opacity, "opacity");
+        fadeAnim->setDuration(220);
+        fadeAnim->setStartValue(0.0);
+        fadeAnim->setEndValue(1.0);
+
+        auto* group = new QParallelAnimationGroup(ghost);
+        group->addAnimation(geoAnim);
+        group->addAnimation(fadeAnim);
+
+        connect(group, &QParallelAnimationGroup::finished, this, [this, ghost]() {
+            ghost->close();
+            setWindowOpacity(1.0);
+        });
+
+        group->start(QAbstractAnimation::DeleteWhenStopped);
+    });
+}
+*/
 MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent) {
     m_manager = new GameManager(this);
 
@@ -194,10 +315,10 @@ void MainWindow::setupSidebar() {
     };
 
     m_rescanBtn         = makeBtn("↺", "重新扫描");
-    m_changeBgBtn       = makeBtn("🖼", "更换背景");
     m_changeScanPathBtn = makeBtn("📁", "修改目录");
+    m_reorderBtn        = makeBtn("⇅", "调整排序");
+    m_changeBgBtn       = makeBtn("🖼", "更换背景");
     m_appgameinfo       = makeBtn("ℹ", "应用信息");
-
     layout->addStretch();
 
     m_statusLabel = new QLabel("", m_sidebar);
@@ -212,13 +333,30 @@ void MainWindow::setupSidebar() {
     connect(m_rescanBtn,         &QPushButton::clicked, this, &MainWindow::onRescan);
     connect(m_changeBgBtn,       &QPushButton::clicked, this, &MainWindow::onChangeBg);
     connect(m_changeScanPathBtn, &QPushButton::clicked, this, &MainWindow::onChangeScanPath);
+    connect(m_reorderBtn, &QPushButton::clicked, this, &MainWindow::onReorder);
     connect(m_appgameinfo, &QPushButton::clicked, this, &MainWindow::appgameinfo);
 }
 
 void MainWindow::setSidebarExpanded(bool /*expanded*/) {
     // 已简化为纯图标模式，无展开功能
 }
+void MainWindow::onReorder() {
+    if (m_manager->getGames().isEmpty()) {
+        showNotification("✗  没有游戏可以排序", true);
+        return;
+    }
 
+    auto* dlg = new OrderDialog(m_manager->getGames(), this);
+
+    connect(dlg, &QDialog::accepted, this, [this, dlg]() {
+        QList<QString> ordered = dlg->orderedPaths();
+        m_manager->applyOrder(ordered);
+        rebuildCards();
+        showNotification("✓  排列顺序已保存");
+    });
+
+    dlg->show();
+}
 void MainWindow::setupMainArea() {
     m_scrollArea = new QScrollArea(m_bgWidget);
     m_scrollArea->setWidgetResizable(true);
@@ -318,7 +456,6 @@ void MainWindow::animateCardsIn() {
         });
     }
 }
-
 void MainWindow::onRescan() {
     m_statusLabel->setText("扫描中...");
     m_manager->scanGames();
@@ -360,7 +497,7 @@ void MainWindow::appgameinfo() {
     inner->addWidget(title);
 
     auto* sub = new QLabel(
-        "应用版本：v 2.2.2     编译时间：2026-05-07\n"
+        "应用版本：v 2.2.3     编译时间：2026-05-12\n"
         "开发者：Alice-Cartelet\n"
         "Github：https://github.com/Alice-Cartelet\n"
         "本产品基于Qt框架构建，依照Qt官方许可体系，采用GNU公共许可证第三版（LGPL v3）进行授权与分发。",
@@ -394,7 +531,7 @@ void MainWindow::appgameinfo() {
             return;
         }
         QString latest = QString(reply->readAll()).trimmed();
-        QString current = "2.2.2";
+        QString current = "2.2.3";
         if (latest > current) {
             updateLabel->setText(QString("发现新版本：v %1  点击下载").arg(latest));
             updateLabel->setStyleSheet(
@@ -485,14 +622,23 @@ void MainWindow::onChangeBg() {
 }
 
 void MainWindow::onChangeScanPath() {
-    QString dir = QFileDialog::getExistingDirectory(
-        this, "选择游戏扫描目录", m_manager->getScanPath());
-    if (dir.isEmpty()) return;
-    m_manager->setScanPath(dir);
-    m_manager->scanGames();
-    rebuildCards();
-    m_statusLabel->setText("目录: " + QFileInfo(dir).fileName());
-    showNotification("✓  扫描目录已更新: " + dir);
+    auto* dlg = new PathManagerDialog(m_manager->getScanPaths(), this);
+
+    connect(dlg, &QDialog::accepted, this, [this, dlg]() {
+        QStringList newPaths = dlg->paths();
+        if (newPaths.isEmpty()) {
+            showNotification("✗  至少需要保留一个扫描目录", true);
+            return;
+        }
+        m_manager->setScanPaths(newPaths);
+        m_manager->scanGames();
+        rebuildCards();
+        showNotification(
+            "✓  目录已更新，共 " +
+            QString::number(m_manager->getGames().size()) + " 个游戏");
+    });
+
+    dlg->show();
 }
 
 void MainWindow::launchGame(int index) {

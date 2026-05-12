@@ -21,12 +21,14 @@ public:
     explicit MainWindow(QWidget* parent = nullptr);
 protected:
     void resizeEvent(QResizeEvent* e) override;
+    //void changeEvent(QEvent* event) override;
     bool eventFilter(QObject* obj, QEvent* event) override;
     void showEvent(QShowEvent* event) override;
 private slots:
     void onChangeScanPath();
     void appgameinfo();
     void onRescan();
+    void onReorder();
     void onChangeBg();
     void onGameLaunch(int index);
     void onGameDetail(int index);
@@ -37,9 +39,13 @@ private slots:
     void onGameNameChanged(int index, const QString& name);
     void rebuildCards();
 private:
+    bool m_animating = false;
+    QRect m_restoreGeo;
     void setupUI();
     void setupTitleBar();
     void setupSidebar();
+    //void playMinimizeAnimation();
+    //void playRestoreAnimation();
     void setupMainArea();
     void checkFirstRun();
     void showNotification(const QString& msg, bool isError = false);
@@ -50,6 +56,7 @@ private:
     void setGridRightMargin(int targetRight, int duration);
     GameManager*      m_manager;
     BackgroundWidget* m_bgWidget;
+    QPushButton*      m_reorderBtn = nullptr;
     DetailPanel*      m_detailPanel;
     QWidget*          m_titleBar;
     QWidget*          m_sidebar;

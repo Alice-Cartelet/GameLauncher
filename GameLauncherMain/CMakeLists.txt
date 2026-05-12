@@ -31,7 +31,11 @@ set(SOURCES
     appicon.rc
 )
 
-add_executable(GameLauncher ${SOURCES})
+add_executable(GameLauncher ${SOURCES}
+    src/pathmanagerdialog.h
+    src/pathmanagerdialog.cpp
+    src/orderdialog.h
+    src/orderdialog.cpp)
 target_link_libraries(GameLauncher PRIVATE Qt6::Core Qt6::Widgets Qt6::Gui)
 
 if(WIN32)
