@@ -66,7 +66,7 @@
 * 并遵循本项目采用 MIT License 协议。
 ```
 MIT 许可证
-版权所有 (c) 2025 Alice-Cartelet
+版权所有 (c) 2026 Alice-Cartelet
 特此免费授予任何获得本软件及相关文档文件（以下简称“软件”）副本的人员不受限制地处理本软件
 的权利，包括但不限于使用、复制、修改、合并、发布、分发、再许可和/或出售本软件副本的权利，
 并允许向其提供本软件的人员这样做，但须符合以下条件：
@@ -76,7 +76,7 @@ MIT 许可证
 而产生、引起或与之相关的任何索赔、损害或其他责任负责，无论是在合同诉讼、侵权行为还是其他
 方面。
 MIT License
-Copyright (c) 2025 Alice-Cartelet
+Copyright (c) 2026 Alice-Cartelet
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
